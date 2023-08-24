@@ -179,14 +179,13 @@ if __name__ == '__main__':
 
     attentions = model.get_last_selfattention(img.to(device))
     
-    attentions0 = torch.clone(attentions) # ...
-
     print('attentions:',attentions.shape)
+    print('first values:',attentions.reshape(-1)[:10])
+
     nh = attentions.shape[1] # number of head
 
     # we keep only the output patch attention
     attentions = attentions[0, :, 0, 1:].reshape(nh, -1)
-    print('first value:',attentions.reshape(-1)[0])
 
     if args.threshold is not None:
         # we keep only a certain percentage of the mass
@@ -218,4 +217,4 @@ if __name__ == '__main__':
             display_instances(image, th_attn[j], fname=os.path.join(args.output_dir, "mask_th" + str(args.threshold) + "_head" + str(j) +".png"), blur=False)
 
     print('saving model to ONNX')
-    torch.onnx.export(model.to('cpu'), img.to('cpu'), '../dino_deits8-480.onnx', opset_version=11)
+    torch.onnx.export(model.to('cpu'), img.to('cpu'), '../dino_deits8-'+str(args.image_size[0])+'.onnx', opset_version=11)

@@ -3,7 +3,8 @@ import onnxruntime as ort
 import cv2 as cv
 import time
 
-session = ort.InferenceSession("dino_deits8-480-final.onnx", providers=['CUDAExecutionProvider'])
+sz = 480 # 224
+session = ort.InferenceSession(f"dino_deits8-{sz}-final.onnx", providers=['CUDAExecutionProvider'])
 input_names = [input.name for input in session.get_inputs()]
 output_names = [output.name for output in session.get_outputs()]
 
@@ -18,7 +19,7 @@ while True:
         break
     i += 1
     
-    image_size = (480, 480)
+    image_size = (sz, sz)
     blob = cv.dnn.blobFromImage(frame, 1.0/255, image_size, (0, 0, 0), swapRB=True, crop=True)
     blob[0][0] = (blob[0][0] - 0.485)/0.229
     blob[0][1] = (blob[0][1] - 0.456)/0.224
