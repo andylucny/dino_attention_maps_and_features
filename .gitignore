@@ -162,4 +162,4 @@ cython_debug/
 # results
 attn-head*.png
 *.onnx
-dino_deits8-480-*.txt
+dino_deits8-*.txt
